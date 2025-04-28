@@ -5,8 +5,9 @@
 
 	<parent>
 		<groupId>com.micro</groupId>
-		<artifactId>microservices</artifactId>
+		<artifactId>service-parent</artifactId>
 		<version>10.0.1</version>
+		<relativePath>../service-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>user-service</artifactId>
