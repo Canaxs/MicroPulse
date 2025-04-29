@@ -6,3 +6,10 @@ spring:
     config:
       profile: native
       uri: http://localhost:8888
+
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8501
+          predicates:
+            - Path=/user-service/**
