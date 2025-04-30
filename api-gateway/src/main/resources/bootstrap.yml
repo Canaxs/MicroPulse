@@ -10,6 +10,13 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: http://localhost:8501
+          uri: lb://user-service
           predicates:
             - Path=/user-service/**
+          filters:
+            - JwtAuthenticationFilter
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8500/eureka/

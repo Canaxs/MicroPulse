@@ -1,6 +1,5 @@
 package com.micro.api_gateway.config;
 
-import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +13,8 @@ public class RouteValidator {
             "/user-service/auth/login"
     );
 
-    public Predicate<RequestPath> isSecured =
+    public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()
-                    .noneMatch(uri -> request.toString().startsWith(uri));
+                    .noneMatch(uri -> request.getURI().getPath().contains(uri));
 }
