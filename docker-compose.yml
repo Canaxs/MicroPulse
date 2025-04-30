@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  config-server:
+    build:
+      context: ./config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - micro-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+    ports:
+      - "8500:8500"
+    networks:
+      - micro-net
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/actuator/health"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "8502:8502"
+    networks:
+      - micro-net
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8502/actuator/health"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "8501"
+    networks:
+      - micro-net
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/actuator/health"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+networks:
+  micro-net:
+    driver: bridge
