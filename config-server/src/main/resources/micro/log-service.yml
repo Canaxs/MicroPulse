@@ -1,0 +1,23 @@
+server:
+  port: 8503
+
+spring:
+  application:
+    name: log-service
+  elasticsearch:
+    rest:
+      uris: "http://localhost:9200"
+    host: "localhost"
+    port: 9200
+    schema: "http"
+    cluster-name: "elasticsearch"
+    connection-timeout: 10000
+    read-timeout: 5000
+
+
+eureka:
+  client:
+    instance:
+      hostname: localhost
+    serviceUrl:
+      defaultZone: http://localhost:8500/eureka/

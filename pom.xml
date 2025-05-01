@@ -23,6 +23,7 @@
 	<modules>
 		<module>config-server</module>
 		<module>service-parent</module>
+		<module>log-service</module>
 		<module>user-service</module>
 		<module>eureka-server</module>
 		<module>api-gateway</module>
