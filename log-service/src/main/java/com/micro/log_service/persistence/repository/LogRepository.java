@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface LogRepository extends ElasticsearchRepository<Log, String> {
-    List<Log> findByUsername(String username);
 }
