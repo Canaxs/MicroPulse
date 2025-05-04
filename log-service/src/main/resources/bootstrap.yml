@@ -7,6 +7,13 @@ spring:
       profile: native
       uri: http://localhost:8888
 
+
+  elasticsearch:
+    uris: http://localhost:9200/
+    connection-timeout: 5s
+    socket-timeout: 10s
+
+
 eureka:
   client:
     service-url:
