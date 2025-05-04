@@ -2,6 +2,7 @@ package com.micro.log_service.service;
 
 import com.micro.log_service.dto.LogEvent;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +15,12 @@ public class KafkaLogConsumer {
     }
 
     @KafkaListener(topics = "logs-topic", groupId = "log-group")
-    public void consume(LogEvent logEvent) {
-        logService.saveLog(logEvent);
+    public void consume(LogEvent logEvent, Acknowledgment ack) {
+        try {
+            logService.saveLog(logEvent);
+            ack.acknowledge();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 }

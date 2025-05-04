@@ -20,41 +20,16 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final LogProducerService logProducerService;
-
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, LogProducerService logProducerService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.logProducerService = logProducerService;
     }
 
     @Override
     public User create(UserDTO userDTO) {
-        try {
-            User user = userRepository.save(User.builder()
+        return userRepository.save(User.builder()
                     .username(userDTO.getUsername())
                     .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build());
-            HttpStatus status = HttpStatus.CREATED;
-            logProducerService.sendLog(LogEvent.builder()
-                            .message("Username: "+userDTO.getUsername())
-                            .serviceName("user-service")
-                            .serviceURL("/user/create/")
-                            .statusCode(status.value() + " " + status.getReasonPhrase())
-                            .logDate(LocalDateTime.now())
-                    .build());
-            return user;
-        }
-        catch (Exception e) {
-            HttpStatus status = HttpStatus.BAD_REQUEST;
-            logProducerService.sendLog(LogEvent.builder()
-                    .message("Username: "+userDTO.getUsername())
-                    .serviceName("user-service")
-                    .serviceURL("/user/create/")
-                    .statusCode(status.value() + " " + status.getReasonPhrase())
-                    .logDate(LocalDateTime.now())
-                    .build());
-            throw new RuntimeException();
-        }
     }
 }
