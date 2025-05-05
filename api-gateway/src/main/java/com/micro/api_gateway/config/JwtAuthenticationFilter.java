@@ -52,10 +52,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 String token = exchange.getRequest().getHeaders().getFirst("Authorization");
                 if (token.startsWith("Bearer ")) {
                     token = token.substring(7);
-
-                    if (jwtUtil.validateToken(token, publicKey)) {
-                        exchange.getAttributes().put("username", jwtUtil.extractUsername(token, publicKey));
-                    } else {
+                    if (!jwtUtil.validateToken(token, publicKey)) {
                         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
                     }
                 } else {

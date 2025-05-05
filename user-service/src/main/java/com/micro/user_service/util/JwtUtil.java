@@ -12,6 +12,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -33,11 +34,15 @@ public class JwtUtil {
             throw new Exception("JWT private key initialization failed: " + e.getMessage() , e);
         }
     }
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, String role , String userId) {
         Instant now = Instant.now();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role",role);
+        claims.put("username",username);
+        claims.put("userId",userId);
         return Jwts.builder()
                 .setSubject(username)
-                .addClaims(Map.of("role", role))
+                .addClaims(claims)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plusSeconds(3600))) // 1 saat geçerli
                 .signWith(privateKey, SignatureAlgorithm.RS256)

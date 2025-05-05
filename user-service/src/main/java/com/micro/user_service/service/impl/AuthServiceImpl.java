@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> userOpt = userRepository.findByUsername(userDTO.getUsername());
         if (userOpt.isPresent()) {
             if(passwordEncoder.matches(userDTO.getPassword(), userOpt.get().getPassword())) {
-                return jwtUtil.generateToken(userOpt.get().getUsername(),"user");
+                return jwtUtil.generateToken(userOpt.get().getUsername(),"user", String.valueOf(userOpt.get().getId()));
             }
         }
         throw new RuntimeException();
