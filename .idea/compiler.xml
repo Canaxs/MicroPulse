@@ -7,12 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="config-server" />
+        <module name="tokenclaims" />
         <module name="api-gateway" />
         <module name="log-service" />
-        <module name="config-server" />
+        <module name="product-service" />
         <module name="user-service" />
         <module name="eureka-server" />
-        <module name="tokenclaims" />
       </profile>
     </annotationProcessing>
   </component>
@@ -22,6 +23,7 @@
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="log-service" options="-parameters" />
+      <module name="product-service" options="-parameters" />
       <module name="tokenclaims" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

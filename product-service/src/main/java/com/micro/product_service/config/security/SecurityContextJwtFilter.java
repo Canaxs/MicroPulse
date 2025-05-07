@@ -1,7 +1,8 @@
-package com.micro.user_service.config.security;
+package com.micro.product_service.config.security;
 
 
 import com.micro.tokenclaims.CustomUserDetails;
+import com.micro.tokenclaims.JwtClaimUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.micro.tokenclaims.JwtClaimUtil;
 
 import java.io.IOException;
 
