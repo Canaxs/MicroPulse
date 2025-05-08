@@ -21,7 +21,7 @@ public class LogAspect {
 
     private final LogProducerService logProducerService;
 
-    @Around("@within(org.springframework.stereotype.Service) && !@annotation(com.micro.user_service.annotation.LogIgnore)")
+    @Around("@within(org.springframework.stereotype.Service) && !@annotation(com.micro.product_service.annotation.LogIgnore)")
     public Object logServiceMethods(ProceedingJoinPoint joinPoint) throws Throwable {
         LocalDateTime logDate = LocalDateTime.now();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
