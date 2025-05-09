@@ -22,7 +22,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.createCategory(categoryDto));
     }
 
-    @GetMapping("/getCategoryById/{id}")
+    @GetMapping("/category-id/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
@@ -37,17 +37,17 @@ public class CategoryController {
         categoryService.deleteCategory(id);
     }
 
-    @GetMapping("/getCategoryTree/{parentId}")
+    @GetMapping("/category-tree/{parentId}")
     public ResponseEntity<CategoryDTO> getCategoryTree(@PathVariable("parentId") Long parentId) {
         return ResponseEntity.ok(categoryService.getCategoryTree(parentId));
     }
 
-    @GetMapping("/getAllRootCategories")
+    @GetMapping("/root-categories")
     public ResponseEntity<List<CategoryDTO>> getAllRootCategories() {
         return ResponseEntity.ok(categoryService.getAllRootCategories());
     }
 
-    @GetMapping("/getCategoriesByDepth/{level}")
+    @GetMapping("/category-depth/{level}")
     public ResponseEntity<List<CategoryDTO>> getCategoriesByDepth(@PathVariable("level") int level) {
         return ResponseEntity.ok(categoryService.getCategoriesByDepth(level));
     }

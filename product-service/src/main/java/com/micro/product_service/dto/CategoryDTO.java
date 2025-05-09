@@ -9,6 +9,8 @@ import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDTO {
     private Long id;
     private String name;
