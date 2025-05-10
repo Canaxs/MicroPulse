@@ -27,11 +27,34 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
                         x.requestMatchers(
-                                "/category/**",
-                                "/product/**"
+                                        "/category/category-id/**",
+                                        "/category/category-tree/**",
+                                        "/category/root-categories",
+                                        "/category/category-depth/**",
+                                        "/product/by-product/**",
+                                        "/product/all",
+                                        "/product/by-category/**",
+                                        "/product/search",
+                                        "/product/stock-status",
+                                        "/product/price-range"
                         ).permitAll()
                                 .requestMatchers(
-                                "/product/apply"
+                                        "/category/create",
+                                        "/category/update",
+                                        "/category/delete/**",
+                                        "/product/create",
+                                        "/product/update",
+                                        "/product/delete/**",
+                                        "/product/update-stock",
+                                        "/order/create",
+                                        "/order/update",
+                                        "/order/delete/**",
+                                        "/order/add-items/**",
+                                        "/order/total-amount/**",
+                                        "/order/by-user",
+                                        "/order/items/**",
+                                        "/order/update-item/**",
+                                        "/order/remove-item/**"
                         ).authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
