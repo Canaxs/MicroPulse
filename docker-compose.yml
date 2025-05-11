@@ -149,6 +149,15 @@ services:
     depends_on:
       - zookeeper
 
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+
 networks:
   micro-net:
     driver: bridge
@@ -156,3 +165,6 @@ networks:
     driver: bridge
   kafka-net:
     driver: bridge
+
+volumes:
+  redis-data:

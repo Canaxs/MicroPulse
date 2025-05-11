@@ -11,6 +11,11 @@ import com.micro.product_service.persistence.repository.ProductRepository;
 import com.micro.product_service.service.OrderService;
 import com.micro.tokenclaims.CustomUserDetails;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,20 +29,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository) {
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.orderItemRepository = orderItemRepository;
-    }
-
 
     @Override
+    @CachePut(cacheNames = "orders", key = "#result.id")
+    @CacheEvict(cacheNames = {"orders_all", "orders_by_user", "orders_by_date"}, allEntries = true)
     public OrderDTO createOrder(List<OrderItemDTO> orderItemsDTO) {
         CustomUserDetails customUserDetails = getUserDetails();
 
@@ -70,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(cacheNames = "orders", key = "#orderId")
     public OrderDTO getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
                 .map(order -> new OrderDTO(
@@ -83,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(cacheNames = "orders_all")
     public Page<OrderDTO> getAllOrders(Pageable pageable) {
         return orderRepository.findAll(pageable).map(order -> new OrderDTO(
             order.getId(),
@@ -94,6 +98,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @CachePut(cacheNames = "orders", key = "#orderId")
+    @CacheEvict(cacheNames = {"orders_all", "orders_by_user", "orders_by_date"}, allEntries = true)
     public OrderDTO updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
@@ -103,6 +109,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "orders", key = "#orderId"),
+            @CacheEvict(cacheNames = {"orders_all", "orders_by_user", "orders_by_date"}, allEntries = true)
+    })
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
     }
@@ -133,6 +143,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(cacheNames = "orders_by_user", key = "#userId")
     public Page<OrderDTO> getOrdersByUser(Pageable pageable) {
         CustomUserDetails customUserDetails = getUserDetails();
         return orderRepository.findByUserId(Long.parseLong(customUserDetails.getUserId()), pageable).map(order -> new OrderDTO(
@@ -167,6 +178,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(cacheNames = "orders_by_date", key = "T(java.util.Objects).hash(#startDate, #endDate)")
     public Page<OrderDTO> getOrdersByDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         return orderRepository.findByCreatedAtBetween(startDate, endDate, pageable).map(order -> new OrderDTO(
                 order.getId(),

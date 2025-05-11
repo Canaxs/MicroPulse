@@ -4,6 +4,11 @@ import com.micro.product_service.dto.CategoryDTO;
 import com.micro.product_service.persistence.entity.Category;
 import com.micro.product_service.persistence.repository.CategoryRepository;
 import com.micro.product_service.service.CategoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,16 +16,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-
     @Override
+    @CachePut(cacheNames = "categories", key = "#result.id")
+    @CacheEvict(cacheNames = {"category_tree", "root_categories"}, allEntries = true)
     public CategoryDTO createCategory(CategoryDTO categoryDto) {
         Category category = new Category();
         category.setName(categoryDto.getName());
@@ -35,6 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(cacheNames = "categories", key = "#id")
     public CategoryDTO getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -42,6 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CachePut(cacheNames = "categories", key = "#categoryDTO.id")
+    @CacheEvict(cacheNames = {"category_tree", "root_categories"}, allEntries = true)
     public CategoryDTO updateCategory(CategoryDTO categoryDto) {
         Category category = categoryRepository.findById(categoryDto.getId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -61,6 +68,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "categories", key = "#id"),
+            @CacheEvict(cacheNames = {"category_tree", "root_categories"}, allEntries = true)
+    })
     public void deleteCategory(Long id) {
         try {
             categoryRepository.delete(categoryRepository.getReferenceById(id));
@@ -71,6 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(cacheNames = "category_tree", key = "#parentId")
     public CategoryDTO getCategoryTree(Long parentId) {
         Category category = categoryRepository.findById(parentId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -78,6 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(cacheNames = "root_categories")
     public List<CategoryDTO> getAllRootCategories() {
         return categoryRepository.findByParentCategoryIsNull();
     }

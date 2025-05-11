@@ -8,6 +8,11 @@ import com.micro.product_service.persistence.repository.ProductRepository;
 import com.micro.product_service.service.ProductService;
 import com.micro.product_service.specification.ProductSpecification;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,17 +23,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-    }
-
     @Override
+    @CachePut(cacheNames = "products", key = "#result.id")
+    @CacheEvict(cacheNames = {"products_all", "products_by_category", "products_by_price", "products_by_stock"}, allEntries = true)
     public ProductDTO createProduct(ProductDTO productDto) {
         Product product = Product.builder()
                 .price(productDto.getPrice())
@@ -47,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#id")
     public ProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
@@ -54,6 +58,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(cacheNames = "products", key = "#productDto.id")
+    @CacheEvict(cacheNames = {"products_all", "products_by_category", "products_by_price", "products_by_stock"}, allEntries = true)
     public ProductDTO updateProduct(ProductDTO productDto) {
         Product product = productRepository.findById(productDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
@@ -72,6 +78,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "products", key = "#id"),
+            @CacheEvict(cacheNames = {"products_all", "products_by_category", "products_by_price", "products_by_stock"}, allEntries = true)
+    })
     public void deleteProduct(Long id) {
         try {
             productRepository.deleteById(id);
@@ -82,11 +92,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(cacheNames = "products_all")
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAllByProductDTO();
     }
 
     @Override
+    @Cacheable(cacheNames = "products_by_category", key = "#categoryId")
     public List<ProductDTO> getProductsByCategoryId(Long categoryId) {
         return productRepository.findAllByCategoryAndProductDTO(categoryId);
     }
@@ -106,6 +118,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(cacheNames = "products_by_stock", key = "#inStock")
     public List<ProductDTO> getProductsByStockStatus(boolean inStock) {
         if (inStock) {
             return productRepository.findByStockGreaterThan(0).stream().map(this::convertToDto).collect(Collectors.toList());
@@ -115,6 +128,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(cacheNames = "products_price_range", key = "{#min, #max}")
     public List<ProductDTO> getProductsByPriceRange(BigDecimal min, BigDecimal max) {
         return productRepository.findByPriceBetween(min,max);
     }
