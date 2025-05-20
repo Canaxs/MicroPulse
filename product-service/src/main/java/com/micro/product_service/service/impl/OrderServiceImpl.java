@@ -47,8 +47,6 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
 
-        order = orderRepository.save(order);
-
         List<OrderItem> items = new ArrayList<>();
         for (OrderItemDTO dto : orderItemsDTO) {
             Product product = productRepository.findById(dto.getProductId()).get();
@@ -204,6 +202,7 @@ public class OrderServiceImpl implements OrderService {
         dto.setId(order.getId());
         dto.setOrderDate(order.getOrderDate());
         dto.setTotalAmount(order.getTotalAmount());
+        dto.setStatus(order.getStatus());
 
         List<OrderItemDTO> items = order.getItems().stream()
                 .map(this::toOrderItemDTO)

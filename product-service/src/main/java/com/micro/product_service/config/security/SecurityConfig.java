@@ -48,6 +48,7 @@ public class SecurityConfig {
                                         "/product/update-stock",
                                         "/order/create",
                                         "/order/update",
+                                        "/order/order-by/**",
                                         "/order/delete/**",
                                         "/order/add-items/**",
                                         "/order/total-amount/**",
