@@ -1,6 +1,6 @@
 package com.micro.product_service.persistence.repository;
 
-import com.micro.product_service.dto.OrderItemDTO;
+import com.dto_common.OrderItemDTO;
 import com.micro.product_service.persistence.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem , Long> {
 
-    @Query("SELECT new com.micro.product_service.dto.OrderItemDTO(i.id,i.quantity,i.price,i.product.id , i.order.id) " +
+    @Query("SELECT new com.dto_common.OrderItemDTO(i.id,i.quantity,i.price,i.product.id , i.order.id) " +
             "FROM OrderItem i WHERE i.order.id = :orderId")
     List<OrderItemDTO> findByOrderId(@Param("orderId") Long orderId);
 }

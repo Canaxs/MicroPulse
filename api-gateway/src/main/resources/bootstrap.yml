@@ -25,6 +25,14 @@ spring:
             - RateLimitFilter
             - JwtAuthenticationFilter
 
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - RateLimitFilter
+            - JwtAuthenticationFilter
+
 eureka:
   client:
     service-url:

@@ -1,7 +1,8 @@
 package com.micro.product_service.service.impl;
 
+import com.dto_common.OrderItemDTO;
+import com.micro.product_service.annotation.LogIgnore;
 import com.micro.product_service.dto.OrderDTO;
-import com.micro.product_service.dto.OrderItemDTO;
 import com.micro.product_service.persistence.entity.Order;
 import com.micro.product_service.persistence.entity.OrderItem;
 import com.micro.product_service.persistence.entity.Product;
@@ -17,9 +18,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +39,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @CachePut(cacheNames = "orders", key = "#result.id")
     @CacheEvict(cacheNames = {"orders_all", "orders_by_user", "orders_by_date"}, allEntries = true)
-    public OrderDTO createOrder(List<OrderItemDTO> orderItemsDTO) {
-        CustomUserDetails customUserDetails = getUserDetails();
+    @LogIgnore
+    public OrderDTO createOrder(List<OrderItemDTO> orderItemsDTO ,String userId) {
 
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
@@ -59,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setItems(items);
-        order.setUserId(Long.parseLong(customUserDetails.getUserId()));
+        order.setUserId(Long.valueOf(userId));
         order.setTotalAmount(
                 items.stream().mapToDouble(i -> i.getPrice() * i.getQuantity()).sum()
         );

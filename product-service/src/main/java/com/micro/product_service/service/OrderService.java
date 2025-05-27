@@ -1,7 +1,7 @@
 package com.micro.product_service.service;
 
+import com.dto_common.OrderItemDTO;
 import com.micro.product_service.dto.OrderDTO;
-import com.micro.product_service.dto.OrderItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderDTO createOrder(List<OrderItemDTO> orderItemsDTO);
+    OrderDTO createOrder(List<OrderItemDTO> orderItemsDTO, String userId);
 
     OrderDTO getOrderById(Long orderId);
 

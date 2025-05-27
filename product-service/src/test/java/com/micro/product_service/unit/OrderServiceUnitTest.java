@@ -1,8 +1,7 @@
 package com.micro.product_service.unit;
 
+import com.dto_common.OrderItemDTO;
 import com.micro.product_service.dto.OrderDTO;
-import com.micro.product_service.dto.OrderItemDTO;
-import com.micro.product_service.dto.ProductDTO;
 import com.micro.product_service.persistence.entity.Category;
 import com.micro.product_service.persistence.entity.Order;
 import com.micro.product_service.persistence.entity.OrderItem;
@@ -11,7 +10,6 @@ import com.micro.product_service.persistence.repository.OrderItemRepository;
 import com.micro.product_service.persistence.repository.OrderRepository;
 import com.micro.product_service.persistence.repository.ProductRepository;
 import com.micro.product_service.service.impl.OrderServiceImpl;
-import com.micro.product_service.service.impl.ProductServiceImpl;
 import com.micro.tokenclaims.CustomUserDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,7 +98,7 @@ public class OrderServiceUnitTest {
 
         when(orderRepository.save(any(Order.class))).thenReturn(saveOrder);
 
-        OrderDTO result = orderService.createOrder(orderItemDTOS);
+        OrderDTO result = orderService.createOrder(orderItemDTOS,"1");
 
         assertNotNull(result);
         assertEquals(2, result.getItems().size());

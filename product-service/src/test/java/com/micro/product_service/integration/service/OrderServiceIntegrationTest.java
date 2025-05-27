@@ -1,7 +1,7 @@
 package com.micro.product_service.integration.service;
 
+import com.dto_common.OrderItemDTO;
 import com.micro.product_service.dto.OrderDTO;
-import com.micro.product_service.dto.OrderItemDTO;
 import com.micro.product_service.persistence.entity.Category;
 import com.micro.product_service.persistence.entity.Product;
 import com.micro.product_service.persistence.repository.CategoryRepository;
@@ -62,7 +62,7 @@ public class OrderServiceIntegrationTest {
         item.setProductId(product.getId());
         item.setQuantity(2);
 
-        OrderDTO createdOrder = orderService.createOrder(List.of(item));
+        OrderDTO createdOrder = orderService.createOrder(List.of(item),"1");
 
         assertNotNull(createdOrder.getId());
         assertEquals("PENDING", createdOrder.getStatus());
@@ -179,6 +179,6 @@ public class OrderServiceIntegrationTest {
         item.setProductId(product.getId());
         item.setQuantity(1);
 
-        return orderService.createOrder(List.of(item));
+        return orderService.createOrder(List.of(item),"1");
     }
 }

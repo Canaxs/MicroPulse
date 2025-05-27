@@ -1,11 +1,9 @@
 package com.micro.product_service.integration.controller;
 
+import com.dto_common.OrderItemDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.micro.product_service.dto.OrderItemDTO;
-import com.micro.product_service.persistence.entity.OrderItem;
 import com.micro.product_service.persistence.entity.Product;
-import com.micro.product_service.persistence.repository.CategoryRepository;
 import com.micro.product_service.persistence.repository.OrderItemRepository;
 import com.micro.product_service.persistence.repository.OrderRepository;
 import com.micro.product_service.persistence.repository.ProductRepository;

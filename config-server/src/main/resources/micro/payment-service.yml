@@ -1,0 +1,22 @@
+server:
+  port: 8505
+
+spring:
+  application:
+    name: payment-service
+  zipkin:
+    base-url: http://zipkin:9411
+    enabled: true
+
+eureka:
+  client:
+    instance:
+      hostname: localhost
+    serviceUrl:
+      defaultZone: http://localhost:8500/eureka/
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0

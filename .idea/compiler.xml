@@ -8,6 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="payment-service" />
+        <module name="dto-common" />
         <module name="tokenclaims" />
         <module name="api-gateway" />
         <module name="log-service" />
@@ -24,8 +26,10 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="config-server" options="-parameters" />
+      <module name="dto-common" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="log-service" options="-parameters" />
+      <module name="payment-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
       <module name="tokenclaims" options="-parameters" />
       <module name="user-service" options="-parameters" />

@@ -29,6 +29,8 @@
 		<module>product-service</module>
 		<module>api-gateway</module>
 		<module>tokenclaims</module>
+		<module>dto-common</module>
+		<module>payment-service</module>
 	</modules>
 
 	<dependencyManagement>

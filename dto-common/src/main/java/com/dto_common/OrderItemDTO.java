@@ -1,6 +1,5 @@
-package com.micro.product_service.dto;
+package com.dto_common;
 
-import com.micro.product_service.persistence.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

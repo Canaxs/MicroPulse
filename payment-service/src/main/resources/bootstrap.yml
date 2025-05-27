@@ -1,0 +1,32 @@
+server:
+  servlet:
+    context-path: "/payment-service"
+
+spring:
+  application:
+    name: payment-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/pulse
+    username: "root"
+    password: "root"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  cloud:
+    config:
+      profile: native
+      uri: http://localhost:8888
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8500/eureka/
+
+sandbox:
+  base-url: https://sandbox-api.iyzipay.com
+  api-key: sandbox-Wp5fsh1T2C29JV8du58LYEZt01w6pdqq
+  secret-key: sandbox-SQNweZyxcmoFmDk4YugdewxllaHGNsS2

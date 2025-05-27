@@ -25,16 +25,18 @@ public class LogAspect {
     public Object logServiceMethods(ProceedingJoinPoint joinPoint) throws Throwable {
         LocalDateTime logDate = LocalDateTime.now();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-
-        String serviceName = "user-service";
+        String serviceName = "product-service";
         String serviceURL = request.getRequestURI();
         String method = request.getMethod();
 
         String message = "Request to " + serviceURL + " with method " + method;
-        Object result;
+
         HttpStatus status;
 
         try {
+
+            Object result;
+
             result = joinPoint.proceed();
 
             status = HttpStatus.OK;

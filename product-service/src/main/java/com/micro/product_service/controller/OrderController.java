@@ -1,12 +1,14 @@
 package com.micro.product_service.controller;
 
+import com.dto_common.OrderItemDTO;
 import com.micro.product_service.dto.OrderDTO;
-import com.micro.product_service.dto.OrderItemDTO;
 import com.micro.product_service.service.OrderService;
+import com.micro.tokenclaims.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,8 @@ public class OrderController {
 
     @PostMapping("/create")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody List<OrderItemDTO> orderItemsDTO) {
-        return ResponseEntity.ok(orderService.createOrder(orderItemsDTO));
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(orderService.createOrder(orderItemsDTO, customUserDetails.getUserId()));
     }
 
     @GetMapping("/order-by/{orderId}")
