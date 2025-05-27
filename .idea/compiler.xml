@@ -16,6 +16,9 @@
         <module name="eureka-server" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="zipkin-server" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -26,6 +29,7 @@
       <module name="product-service" options="-parameters" />
       <module name="tokenclaims" options="-parameters" />
       <module name="user-service" options="-parameters" />
+      <module name="zipkin-server" options="-parameters" />
     </option>
   </component>
 </project>
