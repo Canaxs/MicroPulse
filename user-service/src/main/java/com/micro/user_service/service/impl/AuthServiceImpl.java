@@ -2,6 +2,8 @@ package com.micro.user_service.service.impl;
 
 import com.micro.user_service.dto.LogEvent;
 import com.micro.user_service.dto.UserDTO;
+import com.micro.user_service.exception.InvalidPasswordException;
+import com.micro.user_service.exception.UserNotFoundException;
 import com.micro.user_service.persistence.entity.User;
 import com.micro.user_service.persistence.repository.UserRepository;
 import com.micro.user_service.service.AuthService;
@@ -35,7 +37,12 @@ public class AuthServiceImpl implements AuthService {
             if(passwordEncoder.matches(userDTO.getPassword(), userOpt.get().getPassword())) {
                 return jwtUtil.generateToken(userOpt.get().getUsername(),"user", String.valueOf(userOpt.get().getId()));
             }
+            else {
+                throw new InvalidPasswordException("Invalid password for username '" + userDTO.getUsername() + "'.");
+            }
         }
-        throw new RuntimeException();
+        else {
+            throw new UserNotFoundException("User with username '" + userDTO.getUsername() + "' not found.");
+        }
     }
 }
