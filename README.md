@@ -12,7 +12,7 @@ This project follows a fully microservice-oriented architecture using Spring Clo
                               │
                ┌──────────────┴────────────────┬
                │                               │                     
-          [User Service]               [Product Service]     
+          [User Service]               [Product Service] ─── [Payment-Service]   
                │                               │      
                └───────────────┬───────────────┴
                                │  
